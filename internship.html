@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SAI CHATURYA.V | Professional Portfolio</title>
+
+<meta name="description"
+content="Professional Portfolio of SAI CHATURYA.V, B.Tech Student, showcasing skills, projects, achievements and contact information.">
+
+<meta name="keywords"
+content="SAI CHATURYA, Portfolio, BTech Student, Web Developer, HTML5, CSS3, Accessibility">
+
+<meta name="author" content="SAI CHATURYA.V">
+
+<meta property="og:title"
+content="SAI CHATURYA.V Portfolio">
+
+<meta property="og:description"
+content="Accessible Portfolio Website built with Semantic HTML5">
+
+<meta property="og:type"
+content="website">
+
+<style>
+
+:root{
+    --primary:#2563eb;
+    --dark:#0f172a;
+    --light:#f8fafc;
+    --white:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--light);
+    color:#333;
+    line-height:1.7;
+}
+
+.skip-link{
+    position:absolute;
+    left:-9999px;
+}
+
+.skip-link:focus{
+    left:10px;
+    top:10px;
+    background:black;
+    color:white;
+    padding:10px;
+    z-index:1000;
+}
+
+header{
+    background:var(--dark);
+    color:white;
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    max-width:1200px;
+    margin:auto;
+    padding:1rem 2rem;
+}
+
+.logo{
+    font-size:1.5rem;
+    font-weight:bold;
+}
+
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:20px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    padding:8px 12px;
+    border-radius:6px;
+}
+
+.nav-links a:hover,
+.nav-links a:focus{
+    background:var(--primary);
+}
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    background:
+    linear-gradient(
+    135deg,
+    #2563eb,
+    #1e293b);
+    padding:2rem;
+}
+
+.hero h1{
+    font-size:3.5rem;
+    margin-bottom:15px;
+}
+
+.hero p{
+    max-width:700px;
+    font-size:1.2rem;
+}
+
+.btn{
+    margin-top:25px;
+    display:inline-block;
+    padding:12px 24px;
+    background:white;
+    color:#2563eb;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:4rem 2rem;
+}
+
+section{
+    margin-bottom:4rem;
+}
+
+h2{
+    color:var(--dark);
+    margin-bottom:1rem;
+    font-size:2rem;
+}
+
+.card-grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.skills{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(150px,1fr));
+    gap:15px;
+}
+
+.skill{
+    background:white;
+    text-align:center;
+    padding:15px;
+    border-radius:8px;
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
+}
+
+form{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+input:focus,
+textarea:focus{
+    outline:3px solid var(--primary);
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    background:var(--primary);
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+footer{
+    background:var(--dark);
+    color:white;
+    text-align:center;
+    padding:2rem;
+}
+
+@media(max-width:768px){
+
+nav{
+    flex-direction:column;
+}
+
+.nav-links{
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.hero h1{
+    font-size:2.3rem;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<a href="#main-content"
+class="skip-link">
+Skip to Main Content
+</a>
+
+<header role="banner">
+
+<nav aria-label="Primary Navigation">
+
+<div class="logo">
+SAI CHATURYA.V
+</div>
+
+<ul class="nav-links">
+<li><a href="#home">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#skills">Skills</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+
+</nav>
+
+</header>
+
+<main id="main-content">
+
+<section
+id="home"
+class="hero"
+aria-labelledby="hero-heading">
+
+<h1 id="hero-heading">
+SAI CHATURYA.V
+</h1>
+
+<p>
+B.Tech Student | Web Developer |
+Programming Enthusiast |
+Technology Learner
+</p>
+
+<a href="#projects"
+class="btn">
+Explore Projects
+</a>
+
+</section>
+
+<section
+id="about"
+class="container"
+aria-labelledby="about-heading">
+
+<h2 id="about-heading">
+About Me
+</h2>
+
+<article class="card">
+
+<p>
+I am SAI CHATURYA.V, a motivated
+B.Tech student passionate about
+Web Development, Artificial Intelligence,
+Programming, Data Science and Software
+Engineering.
+
+I enjoy building innovative projects,
+learning modern technologies and solving
+real-world problems through technology.
+</p>
+
+</article>
+
+</section>
+
+<section
+id="projects"
+class="container"
+aria-labelledby="projects-heading">
+
+<h2 id="projects-heading">
+Projects
+</h2>
+
+<div class="card-grid">
+
+<article class="card">
+<h3>Portfolio Website</h3>
+<p>
+Responsive and accessible website
+using HTML5 and CSS3.
+</p>
+</article>
+
+<article class="card">
+<h3>Student Management System</h3>
+<p>
+Application for maintaining academic
+records and student information.
+</p>
+</article>
+
+<article class="card">
+<h3>Machine Learning Project</h3>
+<p>
+Prediction model using Python and
+machine learning algorithms.
+</p>
+</article>
+
+</div>
+
+</section>
+
+<section
+id="skills"
+class="container"
+aria-labelledby="skills-heading">
+
+<h2 id="skills-heading">
+Technical Skills
+</h2>
+
+<div class="skills">
+
+<div class="skill">HTML5</div>
+<div class="skill">CSS3</div>
+<div class="skill">JavaScript</div>
+<div class="skill">Python</div>
+<div class="skill">Java</div>
+<div class="skill">SQL</div>
+<div class="skill">Machine Learning</div>
+<div class="skill">Data Structures</div>
+
+</div>
+
+</section>
+
+<section
+id="contact"
+class="container"
+aria-labelledby="contact-heading">
+
+<h2 id="contact-heading">
+Contact Me
+</h2>
+
+<form
+aria-label="Contact Form">
+
+<label for="name">
+Full Name
+</label>
+
+<input
+type="text"
+id="name"
+name="name"
+required
+aria-required="true">
+
+<label for="email">
+Email Address
+</label>
+
+<input
+type="email"
+id="email"
+name="email"
+required
+aria-required="true">
+
+<label for="message">
+Message
+</label>
+
+<textarea
+id="message"
+name="message"
+rows="6"
+required
+aria-required="true">
+</textarea>
+
+<button type="submit">
+Send Message
+</button>
+
+</form>
+
+</section>
+
+</main>
+
+<aside
+aria-label="Additional Information"
+class="container">
+
+<article class="card">
+
+<h2>Career Objective</h2>
+
+<p>
+Seeking internship opportunities to
+apply technical knowledge, gain industry
+experience and contribute to innovative
+projects.
+</p>
+
+</article>
+
+</aside>
+
+<footer role="contentinfo">
+
+<p>
+© 2026 SAI CHATURYA.V
+All Rights Reserved
+</p>
+
+</footer>
+
+</body>
+</html>
