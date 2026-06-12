@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ ApexCatalog | High-Performance E-Commerce</title>
+    <!-- Preconnect to external REST API to optimize TCP/TLS handshake latency -->
+    <link rel="preconnect" href="https://fakestoreapi.com">
+    <style>
+        :root {
+            --primary: #111827;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --bg-main: #f9fafb;
+            --bg-card: #ffffff;
+            --text-dark: #1f2937;
+            --text-muted: #4b5563;
+            --border: #e5e7eb;
+            --radius: 8px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Semantic Layout Components */
+        header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-brand {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links { display: flex; gap: 1.5rem; }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        .nav-link:hover, .nav-link.active { color: var(--accent); }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Dynamic Catalog Engine View CSS */
+        .catalog-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .catalog-layout { grid-template-columns: 1fr; }
+            .filter-sidebar { position: static; }
+        }
+
+        .filter-sidebar {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            height: fit-content;
+        }
+
+        .filter-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem; }
+        
+        .filter-select {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-main);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+
+        .img-wrapper {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            background: #fff;
+            overflow: hidden;
+        }
+        
+        /* Asset Performance Optimization CSS Rule */
+        .product-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s;
+        }
+
+        .product-title { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; pt: 0.5rem; }
+        .product-price { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+        .product-rating { font-size: 0.85rem; color: #b45309; background: #fef3c7; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+
+        /* Dynamic Detail View CSS */
+        .detail-layout {
+            display: grid;
+            grid-template-columns: minmax(300px, 450px) 1fr;
+            gap: 3rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+        }
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; padding: 1.5rem; gap: 2rem; } }
+
+        .detail-info { display: flex; flex-direction: column; justify-content: center; }
+        .detail-cat { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .detail-title { font-size: 2rem; font-weight: 800; line-height: 1.25; margin-bottom: 1rem; }
+        .detail-desc { color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6; }
+        
+        .action-btn {
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: fit-content;
+        }
+        .action-btn:hover { background-color: var(--accent-hover); }
+
+        /* Global Structural Utilities */
+        .loading-shimmer { text-align: center; font-weight: 600; color: var(--text-muted); padding: 4rem 0; font-size: 1.1rem; width: 100%; grid-column: 1 / -1; }
+        .error-banner { background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; padding: 1rem; border-radius: var(--radius); width: 100%; grid-column: 1 / -1; font-weight: 500; }
+        footer { border-top: 1px solid var(--border); text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.85rem; background: var(--bg-card); margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="nav-container">
+            <a href="/" class="logo-brand" data-link>⚡ ApexCatalog</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link" data-link>Products</a>
+                <a href="/about" class="nav-link" data-link>About</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="appView"></main>
+
+    <footer>
+        &copy; 2026 ApexCatalog Engine. Built with Optimized Asynchronous Architectural Modules.
+    </footer>
+
+    <script>
+        /**
+         * GLOBAL CONSTANTS & API REPOSITORIES
+         */
+        const API_BASE = "https://fakestoreapi.com";
+
+        /**
+         * PERFORMANCE UTILITY: STATE STORE & IN-MEMORY CACHE
+         * Eliminates duplicate network overhead over the lifespan of a user's session.
+         */
+        const AppCache = {
+            products: null,
+            categories: null,
+            async getProducts() {
+                if (this.products) return this.products;
+                const res = await fetch(`${API_BASE}/products`);
+                if (!res.ok) throw new Error("Catalog fetch lifecycle dropped by host.");
+                this.products = await res.json();
+                return this.products;
+            },
+            async getCategories() {
+                if (this.categories) return this.categories;
+                const res = await fetch(`${API_BASE}/products/categories`);
+                if (!res.ok) throw new Error("Category taxonomy stream terminated.");
+                this.categories = await res.json();
+                return this.categories;
+            }
+        };
+
+        /**
+         * CLIENT-SIDE ROUTER ROUTINES & INTERFACES
+         */
+        const Router = {
+            routes: [
+                { path: /^\/$/, view: CatalogView },
+                { path: /^\/product\/([0-9]+)$/, view: DetailView },
+                { path: /^\/about$/, view: AboutView }
+            ],
+
+            init() {
+                // Intercept global link executions to process internally via Historial API
+                document.body.addEventListener("click", e => {
+                    const targetLink = e.target.closest("[data-link]");
+                    if (targetLink) {
+                        e.preventDefault();
+                        this.navigateTo(targetLink.getAttribute("href"));
+                    }
+                });
+
+                // Listen for structural back/forward environment updates
+                window.addEventListener("popstate", () => this.route());
+                
+                // Fire initialization route evaluation
+                this.route();
+            },
+
+            navigateTo(url) {
+                history.pushState(null, null, url);
+                this.route();
+            },
+
+            async route() {
+                const currentPath = window.location.pathname;
+                const appContainer = document.getElementById("appView");
+                
+                // Track state transitions across navigation links
