@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Weather Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --accent: #007bff;
+            --error-bg: #ffebee;
+            --error-text: #c62828;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            display: none;
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .weather-info {
+            display: none;
+        }
+
+        .city-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+
+        .weather-description {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .metric-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h1>Weather Dashboard</h1>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Enter city name... (e.g. London)" autocomplete="off">
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <div id="errorDisplay" class="error-message"></div>
+
+        <div id="weatherDisplay" class="weather-info">
+            <div id="cityName" class="city-name"></div>
+            <div id="weatherDesc" class="weather-description"></div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Temperature</div>
+                    <div id="tempVal" class="metric-value">--</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Humidity</div>
+                    <div id="humidityVal" class="metric-value">--</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Wind Speed</div>
+                    <div id="windVal" class="metric-value">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Map WMO Weather Interpretation Codes to readable descriptions
+        const weatherCodeMap = {
+            0: 'Clear sky',
+            1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+            45: 'Fog', 48: 'Depositing rime fog',
+            51: 'Light drizzle', 53: 'Moderate drizzle', 55: 'Dense drizzle',
+            61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
+            71: 'Slight snow fall', 73: 'Moderate snow fall', 75: 'Heavy snow fall',
+            80: 'Slight rain showers', 81: 'Moderate rain showers', 82: 'Violent rain showers',
+            95: 'Thunderstorm',
+        };
+
+        // DOM Elements
+        const cityInput = document.getElementById('cityInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const errorDisplay = document.getElementById('errorDisplay');
+        const weatherDisplay = document.getElementById('weatherDisplay');
+
+        const cityNameEl = document.getElementById('cityName');
+        const weatherDescEl = document.getElementById('weatherDesc');
+        const tempValEl = document.getElementById('tempVal');
+        const humidityValEl = document.getElementById('humidityVal');
+        const windValEl = document.getElementById('windVal');
+
+        // Event Listeners
+        searchBtn.addEventListener('click', handleSearch);
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        /**
+         * Primary orchestrator managing input parsing and presentation states.
+         */
+        async function handleSearch() {
+            const cityName = cityInput.value.trim();
+            
+            if (!cityName) {
+                showError('Please enter a city name to search.');
+                return;
+            }
+
+            clearDisplays();
+
+            try {
+                // Step 1: Fetch coordinates using Geocoding API
+                const coordinates = await fetchCoordinates(cityName);
+                
+                // Step 2: Fetch actual weather metrics using Coordinates
+                const weatherData = await fetchWeather(coordinates.latitude, coordinates.longitude);
+                
+                // Step 3: Render processed structured data to UI
+                renderWeather(coordinates.name, coordinates.country, weatherData);
+            } catch (error) {
+                showError(error.message || 'An unexpected runtime error occurred.');
+            }
+        }
+
+        /**
+         * Asynchronously converts city names to precise GPS coordinates
+         */
+        async function fetchCoordinates(city) {
+            const geoUrl = `https://open-meteo.com{encodeURIComponent(city)}&count=1&language=en&format=json`;
+            
+            const response = await fetch(geoUrl);
+            
+            if (!response.ok) {
+                throw new Error(`Geocoding network interface failed: Status ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Explicit structure verification validating JSON parser outcomes 
+            if (!data.results || data.results.length === 0) {
+                throw new Error(`Could not find coordinates for "${city}". Please check spelling.`);
+            }
+            
+            // De-structure first nested result object cleanly
+            const { latitude, longitude, name, country } = data.results[0];
+            return { latitude, longitude, name, country };
+        }
+
+        /**
+         * Fetches metric weather details for specific coordinate targets
+         */
+        async function fetchWeather(lat, lon) {
+            const weatherUrl = `https://open-meteo.com{lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m`;
+            
+            const response = await fetch(weatherUrl);
+            
+            if (!response.ok) {
+                throw new Error(`Weather metrics extraction failed: Status ${response.status}`);
+            }
+            
+            return await response.json();
+        }
+
+        /**
+         * Parses nested objects, extracts variables, and modifies layout nodes securely
+         */
+        function renderWeather(targetCity, country, data) {
+            // Comprehensive evaluation of target properties across nested objects
+            if (!data || !data.current || !data.current_units) {
+                throw new Error('Retrieved data configuration properties are corrupt or incomplete.');
+            }
+
+            const currentMetrics = data.current;
+            const metricUnits = data.current_units;
+
+            // Direct mapping to isolated layout DOM variables
+            cityNameEl.textContent = `${targetCity}, ${country}`;
+            
+            const code = currentMetrics.weather_code;
+            weatherDescEl.textContent = weatherCodeMap[code] || 'Unclassified Conditions';
+
+            tempValEl.textContent = `${currentMetrics.temperature_2m}${metricUnits.temperature_2m}`;
+            humidityValEl.textContent = `${currentMetrics.relative_humidity_2m}${metricUnits.relative_humidity_2m}`;
+            windValEl.textContent = `${currentMetrics.wind_speed_10m} ${metricUnits.wind_speed_10m}`;
+
+            // Update screen state visibility toggles 
+            weatherDisplay.style.display = 'block';
+        }
+
+        function showError(msg) {
+            errorDisplay.textContent = msg;
+            errorDisplay.style.display = 'block';
+        }
+
+        function clearDisplays() {
+            errorDisplay.style.display = 'none';
