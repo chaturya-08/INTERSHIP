@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SAI CHATURYA.V Portfolio</title>
+
+<style>
+
+/* CSS VARIABLES */
+:root{
+    --bg-color:#f5f7fa;
+    --text-color:#222;
+    --card-bg:#ffffff;
+    --primary:#2563eb;
+    --secondary:#0f172a;
+}
+
+.dark-theme{
+    --bg-color:#0f172a;
+    --text-color:#f8fafc;
+    --card-bg:#1e293b;
+    --primary:#60a5fa;
+    --secondary:#020617;
+}
+
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:var(--bg-color);
+    color:var(--text-color);
+    transition:0.4s;
+}
+
+/* HEADER USING FLEXBOX */
+header{
+    background:var(--secondary);
+    color:white;
+    padding:15px 30px;
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.nav-links{
+    display:flex;
+    gap:20px;
+    list-style:none;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+}
+
+.theme-btn{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* HERO SECTION */
+.hero{
+    min-height:80vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(135deg,#2563eb,#1e293b);
+    color:white;
+    padding:20px;
+}
+
+.hero h1{
+    font-size:3rem;
+}
+
+.hero p{
+    margin-top:10px;
+    max-width:700px;
+}
+
+/* CONTAINER */
+.container{
+    width:90%;
+    margin:auto;
+    padding:50px 0;
+}
+
+/* CSS GRID */
+.projects-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
+}
+
+.card{
+    background:var(--card-bg);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+
+/* SKILLS FLEXBOX */
+.skills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.skill{
+    background:var(--primary);
+    color:white;
+    padding:10px 15px;
+    border-radius:20px;
+}
+
+/* CONTACT FORM */
+form{
+    display:grid;
+    gap:15px;
+}
+
+input,
+textarea{
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+button{
+    background:var(--primary);
+    color:white;
+    border:none;
+    padding:12px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    background:var(--secondary);
+    color:white;
+    padding:20px;
+}
+
+/* TABLET VIEW */
+@media(min-width:768px){
+
+.projects-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.hero h1{
+    font-size:4rem;
+}
+
+}
+
+/* DESKTOP VIEW */
+@media(min-width:1024px){
+
+.projects-grid{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.hero{
+    min-height:90vh;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<nav class="navbar">
+
+<h2>SAI CHATURYA.V</h2>
+
+<ul class="nav-links">
+<li><a href="#about">About</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#skills">Skills</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+
+<button class="theme-btn" onclick="toggleTheme()">
+🌙 Theme
+</button>
+
+</nav>
+</header>
+
+<section class="hero">
+
+<h1>SAI CHATURYA.V</h1>
+
+<p>
+B.Tech Student | Web Developer | AI Enthusiast |
+Responsive Design Specialist
+</p>
+
+</section>
+
+<section id="about" class="container">
+
+<h2>About Me</h2>
+
+<div class="card">
+<p>
+Passionate engineering student with interests in
+Web Development, Artificial Intelligence,
+Machine Learning and Software Engineering.
+</p>
+</div>
+
+</section>
+
+<section id="projects" class="container">
+
+<h2>Projects</h2>
+
+<div class="projects-grid">
+
+<div class="card">
+<h3>Portfolio Website</h3>
+<p>Responsive portfolio using HTML5, CSS3 and JS.</p>
+</div>
+
+<div class="card">
+<h3>Student Management System</h3>
+<p>Application to manage student records.</p>
+</div>
+
+<div class="card">
+<h3>Machine Learning Project</h3>
+<p>Prediction system built using Python.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="skills" class="container">
+
+<h2>Skills</h2>
+
+<div class="skills">
+
+<div class="skill">HTML5</div>
+<div class="skill">CSS3</div>
+<div class="skill">JavaScript</div>
+<div class="skill">Python</div>
+<div class="skill">Java</div>
+<div class="skill">SQL</div>
+
+</div>
+
+</section>
+
+<section id="contact" class="container">
+
+<h2>Contact Me</h2>
+
+<form>
+
+<input
+type="text"
+placeholder="Full Name"
+required>
+
+<input
+type="email"
+placeholder="Email Address"
+required>
+
+<textarea
+rows="5"
+placeholder="Enter Message"
+required></textarea>
+
+<button type="submit">
+Send Message
+</button>
+
+</form>
+
+</section>
+
+<footer>
+<p>© 2026 SAI CHATURYA.V | All Rights Reserved</p>
+</footer>
+
+<script>
+
+function toggleTheme(){
+document.body.classList.toggle("dark-theme");
+}
+
+</script>
+
+</body>
+</html>
